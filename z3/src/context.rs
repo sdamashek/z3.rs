@@ -127,6 +127,10 @@ impl Context {
     pub fn from_real(&self, num: i32, den: i32) -> Ast {
         Ast::from_real(self, num, den)
     }
+
+    pub fn from_str_bv(&self, s: &str, sz: u32) -> Ast {
+        Ast::from_str_bv(self, s, sz)
+    }
 }
 
 impl Drop for Context {

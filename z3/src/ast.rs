@@ -126,6 +126,20 @@ impl<'ctx> Ast<'ctx> {
         })
     }
 
+    pub fn from_str_bv(ctx: &'ctx Context, s: &str, sz: u32) -> Ast<'ctx> {
+        Ast::new(ctx, unsafe {
+            let pp = CString::new(s).unwrap();
+            let p = pp.as_ptr();
+            let sort = ctx.bitvector_sort(sz);
+            let guard = Z3_MUTEX.lock().unwrap();
+            Z3_mk_numeral(
+                ctx.z3_ctx,
+                p,
+                sort.z3_sort
+            )
+        })
+    }
+
     pub fn as_bool(&self) -> Option<bool> {
         unsafe {
             let guard = Z3_MUTEX.lock().unwrap();
