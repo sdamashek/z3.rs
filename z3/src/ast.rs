@@ -188,6 +188,19 @@ impl<'ctx> Ast<'ctx> {
         }
     }
 
+    pub fn as_str(&self) -> Option<&str> {
+        let guard = Z3_MUTEX.lock().unwrap();
+        let p =
+            unsafe { CStr::from_ptr(Z3_get_numeral_string(self.ctx.z3_ctx, self.z3_ast) as *mut i8) };
+        if p.as_ptr().is_null() {
+            return None;
+        }
+        match p.to_str() {
+            Ok(s) => Some(s),
+            Err(_) => None,
+        }
+    }
+
     varop!(distinct, Z3_mk_distinct);
 
     // Boolean ops
