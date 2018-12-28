@@ -201,6 +201,19 @@ impl<'ctx> Ast<'ctx> {
         }
     }
 
+    pub fn is_bv_val(&self) -> bool {
+        let guard = Z3_MUTEX.lock().unwrap();
+        unsafe {
+            let sort = Z3_get_sort(self.ctx.z3_ctx, self.z3_ast);
+
+            if Z3_get_sort_kind(self.ctx.z3_ctx, sort) != SortKind::BV {
+                false
+            } else {
+                Z3_is_numeral_ast(self.ctx.z3_ctx, self.z3_ast)
+            }
+        }
+    }
+
     varop!(distinct, Z3_mk_distinct);
 
     // Boolean ops
