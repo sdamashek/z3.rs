@@ -214,6 +214,13 @@ impl<'ctx> Ast<'ctx> {
         }
     }
 
+    pub fn simplify(&self) -> Ast<'ctx> {
+        let guard = Z3_MUTEX.lock().unwrap();
+        Ast::new(self.ctx, unsafe {
+            Z3_simplify(self.ctx.z3_ctx, self.z3_ast)
+        })
+    }
+
     varop!(distinct, Z3_mk_distinct);
 
     // Boolean ops
