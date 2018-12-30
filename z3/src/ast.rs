@@ -215,8 +215,8 @@ impl<'ctx> Ast<'ctx> {
     }
 
     pub fn simplify(&self) -> Ast<'ctx> {
-        let guard = Z3_MUTEX.lock().unwrap();
         Ast::new(self.ctx, unsafe {
+            let guard = Z3_MUTEX.lock().unwrap();
             Z3_simplify(self.ctx.z3_ctx, self.z3_ast)
         })
     }
