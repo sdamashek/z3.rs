@@ -203,6 +203,7 @@ impl<'ctx> Solver<'ctx> {
 
 impl<'ctx> fmt::Display for Solver<'ctx> {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        let guard = Z3_MUTEX.lock().unwrap();
         let p = unsafe {
             CString::from_raw(Z3_solver_to_string(self.ctx.z3_ctx, self.z3_slv) as *mut i8)
         };
