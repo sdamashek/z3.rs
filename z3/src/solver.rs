@@ -203,6 +203,7 @@ impl<'ctx> Solver<'ctx> {
 
 impl<'ctx> fmt::Display for Solver<'ctx> {
     fn fmt(&self, f: &mut fmt::Formatter) -> Result<(), fmt::Error> {
+        let guard = Z3_MUTEX.lock().unwrap();
         let p = unsafe {
             CStr::from_ptr(Z3_solver_to_string(self.ctx.z3_ctx, self.z3_slv) as *mut i8)
         };
@@ -218,7 +219,6 @@ impl<'ctx> fmt::Display for Solver<'ctx> {
 
 impl<'ctx> Drop for Solver<'ctx> {
     fn drop(&mut self) {
-        println!("drop solver");
         let guard = Z3_MUTEX.lock().unwrap();
         unsafe { Z3_solver_dec_ref(self.ctx.z3_ctx, self.z3_slv) };
     }
